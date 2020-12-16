@@ -1,0 +1,31 @@
+h2 {
+    padding-bottom: 20px;
+    color: var(--border-color);
+}
+
+h3 {
+    padding-bottom: 20px;
+    color: var(--border-color);
+}
+
+.profil-content {
+    padding: 20px 20px 20px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    margin-bottom: 60px;
+}
+
+.profil-post {
+    margin-bottom: 30px;
+}
+
+p {
+    margin-bottom: 5px;
+}
+
+textarea {
+    background: var(--main-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
+}

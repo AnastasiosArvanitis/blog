@@ -1,0 +1,39 @@
+html, body {
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    height: 100%;
+}
+
+.index-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 500px;
+}
+
+.login-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 250px;
+    border: 1px solid var(--border-color);
+    border-radius: 20%;
+}
+
+.login-form p {
+    margin-bottom: 10px;
+}
+
+.signup-link {
+
+}
+
+#login-submit-btn {
+    background: var(--header-bg-color);
+    color: var(--border-color);
+    padding: 10px;
+}
