@@ -4,16 +4,20 @@ import info.anastasios.blog.bo.Member;
 import info.anastasios.blog.dal.DaoFactory;
 import info.anastasios.blog.dal.dao.MemberDao;
 import info.anastasios.blog.dal.dao.PostDao;
+import info.anastasios.blog.utlis.BlogLogger;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MemberManager {
 
     private static MemberManager instance;
     private MemberDao memberDao;
     private PostDao postDao;
+
+    private Logger logger = BlogLogger.getLogger("MemberManager");
 
     //Constructeur privé => PATTERN SINGLETON
     private MemberManager() {
@@ -35,7 +39,7 @@ public class MemberManager {
         try {
             member = memberDao.selectMemberById(id);
         } catch (SQLException e) {
-            System.out.println("error bll member manager");
+            logger.severe("Error method getMemberById " + e.getMessage() + "\n");
             e.printStackTrace();
         }
 
@@ -47,7 +51,7 @@ public class MemberManager {
         try {
              listAllMembers = memberDao.listAllMembers();
         } catch (SQLException e) {
-            System.out.println("BLL List all members error...");
+            logger.severe("Error method getMembers " + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return listAllMembers;
@@ -59,20 +63,50 @@ public class MemberManager {
         try {
             member = memberDao.selectLogin(email, password);
         } catch (SQLException e) {
-            System.out.println("BLL member loggin error...");
+            logger.severe("Error method getMemberLogin " + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return member;
     }
 
     public Member putMember(Member member) throws SQLException {
-        Member tempMember = null;
+        Member newMember = null;
         try {
-            tempMember = memberDao.insertMember(member);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            newMember = memberDao.insertMember(member);
+        } catch (SQLException e) {
+            logger.severe("Error method putMember " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
-        return tempMember;
+        return newMember;
     }
 
+    public boolean editMember(Member member) throws SQLException {
+        boolean updated = false;
+
+        if (member.getFirstName().trim().equals("") || member.getLastName().trim().equals("") ||
+            member.getEmail().trim().equals("") || member.getPassword().trim().equals("")) {
+            throw new SQLException("Empty fields not allowed for update member");
+        }
+
+        try {
+            updated = memberDao.updateMember(member);
+        } catch (SQLException e) {
+            logger.severe("Error method editMember " + e.getMessage() + "\n");
+            e.printStackTrace();
+        }
+        return updated;
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+

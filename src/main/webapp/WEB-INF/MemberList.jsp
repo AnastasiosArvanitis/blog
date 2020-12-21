@@ -5,11 +5,11 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="./styles/_global.css">
+    <link rel="stylesheet" type="text/css" href="../styles/_global.css">
 </head>
 <body>
 
-<jsp:include page="header.jsp"/>
+<jsp:include page="../header.jsp"/>
 
     <%
         List<Member> theMembers = (List<Member>) request.getAttribute("listMember");
@@ -32,6 +32,6 @@
 
     </table>
 
-<jsp:include page="footer.jsp"/>
+<jsp:include page="../footer.jsp"/>
 </body>
 </html>
