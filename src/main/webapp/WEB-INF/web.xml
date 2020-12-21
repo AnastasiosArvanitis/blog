@@ -3,12 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+  <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
 
     <display-name>Blog Management Web Application</display-name>
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
 
     <servlet>
         <servlet-name>Login</servlet-name>
@@ -18,6 +22,7 @@
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
+
 
     <servlet>
         <servlet-name>MemberList</servlet-name>
@@ -73,9 +78,82 @@
         <url-pattern>/AddPost</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>UpdateMember</servlet-name>
+        <servlet-class>info.anastasios.blog.servlets.UpdateMember</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateMember</servlet-name>
+        <url-pattern>/UpdateMember</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ChoseTheme</servlet-name>
+        <servlet-class>info.anastasios.blog.servlets.ChoseTheme</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChoseTheme</servlet-name>
+        <url-pattern>/ChoseTheme</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeletePost</servlet-name>
+        <servlet-class>info.anastasios.blog.servlets.DeletePost</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeletePost</servlet-name>
+        <url-pattern>/DeletePost</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Error</servlet-name>
+        <servlet-class>info.anastasios.blog.servlets.Error</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Error</servlet-name>
+        <url-pattern>/Error</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Admin</servlet-name>
+        <servlet-class>info.anastasios.blog.servlets.Admin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Admin</servlet-name>
+        <url-pattern>/Admin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GetJsonPosts</servlet-name>
+        <servlet-class>info.anastasios.blog.servlets.GetJsonPosts</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetJsonPosts</servlet-name>
+        <url-pattern>/GetJsonPosts</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GetJsonMembers</servlet-name>
+        <servlet-class>info.anastasios.blog.servlets.GetJsonMembers</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetJsonMembers</servlet-name>
+        <url-pattern>/GetJsonMembers</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/Error404.jsp</location>
+    </error-page>
+
+    <!--<error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/Error.jsp</location>
+    </error-page>-->
     <error-page>
         <exception-type>java.lang.Exception</exception-type>
-        <location>/Error.jsp</location>
+        <location>/WEB-INF/Error.jsp</location>
     </error-page>
+
 
 </web-app>
