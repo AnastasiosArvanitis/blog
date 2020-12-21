@@ -5,16 +5,20 @@ import info.anastasios.blog.bo.Post;
 import info.anastasios.blog.dal.DaoFactory;
 import info.anastasios.blog.dal.dao.MemberDao;
 import info.anastasios.blog.dal.dao.PostDao;
+import info.anastasios.blog.utlis.BlogLogger;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PostManager {
 
     private static PostManager instance;
     private MemberDao memberDao;
     private PostDao postDao;
+
+    private Logger logger = BlogLogger.getLogger("PostManager");
 
     //Constructeur privé => PATTERN SINGLETON
     private PostManager() {
@@ -35,7 +39,7 @@ public class PostManager {
         try {
             listAllPosts = postDao.listAllPosts();
         } catch (SQLException e) {
-            System.out.println("BLL List all members error...");
+            logger.severe("Error method getPosts " + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return listAllPosts;
@@ -46,7 +50,7 @@ public class PostManager {
         try {
             listAllPosts = postDao.selectPostByMemberId(memberId);
         } catch (SQLException e) {
-            System.out.println("BLL List all members error...");
+            logger.severe("Error method getPostByMemberId " + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return listAllPosts;
@@ -56,10 +60,22 @@ public class PostManager {
         Post tempPost = null;
         try {
             tempPost = postDao.insertPost(post);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            logger.severe("Error method putPost " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
         return tempPost;
+    }
+
+    public boolean deletePost(int postId) throws SQLException {
+        boolean result = false;
+        try {
+            result = postDao.deletePost(postId);
+        } catch (SQLException e) {
+            logger.severe("Error method deletePost " + e.getMessage() + "\n");
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

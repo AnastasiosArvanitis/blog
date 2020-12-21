@@ -4,6 +4,7 @@ import info.anastasios.blog.bll.MemberManager;
 import info.anastasios.blog.bll.PostManager;
 import info.anastasios.blog.bo.Post;
 import info.anastasios.blog.dal.PostDaoJdbcImpl;
+import info.anastasios.blog.utlis.BlogLogger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,11 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PostList extends HttpServlet {
 
     private MemberManager memberManager = null;
     private PostManager postManager = null;
+
+    private Logger logger = BlogLogger.getLogger("PostList");
 
     @Override
     public void init() throws ServletException {
@@ -33,11 +37,12 @@ public class PostList extends HttpServlet {
         List<Post> listPost = null;
         try {
             listPost = postManager.getPosts();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            logger.severe("Error servlet PostList " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
         request.setAttribute("listPost", listPost);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/PostList.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/PostList.jsp");
         dispatcher.forward(request, response);
 
     }
