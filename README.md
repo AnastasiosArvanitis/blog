@@ -11,6 +11,6 @@ Logger and custom error control
 
 Checkout some screenshots: 
 
-![alt text](https://www.anastasios-arvanitis.info/githubImages/myProfile.png "Profile section")
-![alt text](https://www.anastasios-arvanitis.info/githubImages/signupLogin.png "Sign up and Login")
-![alt text](https://www.anastasios-arvanitis.info/githubImages/addPost.png "Adding a post")
+![alt text](https://www.anastasios-arvanitis.info/githubImages/javaeeBlog/myProfile.png "Profile section")
+![alt text](https://www.anastasios-arvanitis.info/githubImages/javaeeBlog/signupLogin.png "Sign up and Login")
+![alt text](https://www.anastasios-arvanitis.info/githubImages/javaeeBlog/addPost.png "Adding a post")
