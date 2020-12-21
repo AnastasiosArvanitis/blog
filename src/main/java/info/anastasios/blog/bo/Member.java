@@ -7,11 +7,11 @@ public class Member {
     private String lastName;
     private String email;
     private String password;
+    private boolean isAdmin;
 
     public Member() {}
 
     public Member(String firstName, String lastName, String email, String password) {
-        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -24,6 +24,15 @@ public class Member {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public Member(int id, String firstName, String lastName, String email, String password, boolean isAdmin) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public int getId() {
@@ -66,6 +75,10 @@ public class Member {
         this.password = password;
     }
 
+    public boolean getIsAdmin() { return isAdmin; }
+
+    public void setIsAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
+
     @Override
     public String toString() {
         return "Member{" +
@@ -74,6 +87,7 @@ public class Member {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", isAdmin='" + isAdmin + '\'' +
                 '}';
     }
 
