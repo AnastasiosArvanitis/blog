@@ -4,6 +4,7 @@ import info.anastasios.blog.bll.MemberManager;
 import info.anastasios.blog.bll.PostManager;
 import info.anastasios.blog.bo.Member;
 import info.anastasios.blog.bo.Post;
+import info.anastasios.blog.utlis.BlogLogger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,12 +15,15 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Profil extends HttpServlet {
 
     private MemberManager memberManager = null;
     private PostManager postManager = null;
     private Member member = null;
+
+    private Logger logger = BlogLogger.getLogger("Profil");
 
     @Override
     public void init() throws ServletException {
@@ -38,12 +42,20 @@ public class Profil extends HttpServlet {
         List<Post> listPost = null;
         try {
             listPost = postManager.getPostByMemberId(member.getId());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+
+        } catch (SQLException e) {
+            logger.severe("Error servlet Profil " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
-        request.setAttribute("memberListPost", listPost);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/Profil.jsp");
-        dispatcher.forward(request, response);
+
+        if (member != null) {
+            request.setAttribute("memberListPost", listPost);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Profil.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            response.sendRedirect("/blog/Error?error=notLoggedIn");
+        }
+
 
     }
 
