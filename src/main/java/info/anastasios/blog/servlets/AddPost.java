@@ -4,6 +4,7 @@ import info.anastasios.blog.bll.MemberManager;
 import info.anastasios.blog.bll.PostManager;
 import info.anastasios.blog.bo.Member;
 import info.anastasios.blog.bo.Post;
+import info.anastasios.blog.utlis.BlogLogger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Logger;
 
 
 public class AddPost extends HttpServlet {
@@ -26,6 +28,8 @@ public class AddPost extends HttpServlet {
     private MemberManager memberManager = null;
     private PostManager postManager = null;
     private Member thisMember = null;
+
+    private Logger logger = BlogLogger.getLogger("AddPost");
 
     @Override
     public void init() throws ServletException {
@@ -35,7 +39,6 @@ public class AddPost extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //LocalDate date = LocalDate.now();
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         String strDate = dateFormat.format(date);
@@ -50,21 +53,20 @@ public class AddPost extends HttpServlet {
         Post insertedPost = new Post();
         try {
             insertedPost = postManager.putPost(newPost);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            logger.severe("Error servlet AddPost " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
 
         if (insertedPost != null) {
             response.sendRedirect("/blog/MyProfil");
-            //RequestDispatcher dispatcher = request.getRequestDispatcher("/blog/Profil");
-            //dispatcher.forward(request, response);
         } else {
-            response.sendRedirect("/blog/UserNotFound.jsp");
+            response.sendRedirect("/blog/Error?error=addPostFailed");
         }
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 }
