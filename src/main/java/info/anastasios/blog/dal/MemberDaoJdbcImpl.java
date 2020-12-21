@@ -3,14 +3,18 @@ package info.anastasios.blog.dal;
 import info.anastasios.blog.bo.Member;
 import info.anastasios.blog.dal.dao.MemberDao;
 import info.anastasios.blog.dal.jdbcTools.ConnectionManager;
+import info.anastasios.blog.utlis.BlogLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MemberDaoJdbcImpl implements MemberDao {
 
     private Connection connection = null;
+
+    private Logger logger = BlogLogger.getLogger("MemberDaoJdbcImpl");
 
     @Override
     public List<Member> listAllMembers() throws SQLException {
@@ -28,7 +32,7 @@ public class MemberDaoJdbcImpl implements MemberDao {
             resultSet.close();
             ConnectionManager.disconnect();
         } catch (Exception e) {
-            System.out.println("Cant connect to database... ");
+            logger.severe("Error method listAllMembers " + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return listMember;
@@ -36,7 +40,7 @@ public class MemberDaoJdbcImpl implements MemberDao {
 
     @Override
     public Member selectLogin(String email, String password) throws SQLException {
-        Member member = new Member();
+        Member member = null;
         String sql = "select * from Members where email=? and password=?";
 
         try {
@@ -53,7 +57,7 @@ public class MemberDaoJdbcImpl implements MemberDao {
             query.close();
             ConnectionManager.disconnect();
         } catch (Exception e) {
-            System.out.println("Cant connect to database... ");
+            logger.severe("Error method selectLogin " + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return member;
@@ -61,7 +65,7 @@ public class MemberDaoJdbcImpl implements MemberDao {
 
     @Override
     public Member selectMemberById(int memberId) throws SQLException {
-        Member member = new Member();
+        Member member = null;
         String sql = "select * from Members where memberId=?";
         try {
             connection = ConnectionManager.connect();
@@ -76,7 +80,7 @@ public class MemberDaoJdbcImpl implements MemberDao {
             query.close();
             ConnectionManager.disconnect();
         } catch (Exception e) {
-            System.out.println("Cant connect to database... ");
+            logger.severe("Error method selectMemberById " + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return member;
@@ -99,20 +103,43 @@ public class MemberDaoJdbcImpl implements MemberDao {
                PreparedStatement select = connection.prepareStatement(sqlSelect);
                select.setInt(1, member.getId());
                ResultSet resultSet = select.executeQuery();
+                select.close();
 
                if (resultSet.next()) {
                    member.setId(resultSet.getInt(1));
                }
+               resultSet.close();
            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+           insert.close();
+           connection.close();
+        } catch (SQLException e) {
+            logger.severe("Error method insertMember " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
         return member;
     }
 
     @Override
     public boolean updateMember(Member member) throws SQLException {
-        return false;
+
+        int nmbModifiedLines = 0;
+        String sql = "update Members set firstName=?, lastName=?, email=?, password=? where memberId=?";
+
+        try {
+            connection = ConnectionManager.connect();
+            PreparedStatement query = connection.prepareStatement(sql);
+            query.setString(1, member.getFirstName());
+            query.setString(2, member.getLastName());
+            query.setString(3, member.getEmail());
+            query.setString(4, member.getPassword());
+            query.setInt(5, member.getId());
+            nmbModifiedLines = query.executeUpdate();
+        } catch (SQLException e) {
+            logger.severe("Error method updateMember " + e.getMessage() + "\n");
+            e.printStackTrace();
+        }
+
+        return nmbModifiedLines > 0;
     }
 
     @Override
@@ -129,6 +156,7 @@ public class MemberDaoJdbcImpl implements MemberDao {
         member.setLastName(rs.getString("lastName"));
         member.setEmail(rs.getString("email"));
         member.setPassword(rs.getString("password"));
+        member.setIsAdmin(rs.getBoolean("isAdmin"));
 
         return member;
     }

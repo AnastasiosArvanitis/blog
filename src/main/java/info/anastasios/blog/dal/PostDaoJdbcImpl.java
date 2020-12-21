@@ -5,14 +5,18 @@ import info.anastasios.blog.bo.Post;
 import info.anastasios.blog.dal.dao.MemberDao;
 import info.anastasios.blog.dal.dao.PostDao;
 import info.anastasios.blog.dal.jdbcTools.ConnectionManager;
+import info.anastasios.blog.utlis.BlogLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PostDaoJdbcImpl implements PostDao {
 
     private Connection connection = null;
+
+    private Logger logger = BlogLogger.getLogger("PostDaoJdbcImpl");
 
     @Override
     public List<Post> listAllPosts() throws SQLException {
@@ -30,7 +34,7 @@ public class PostDaoJdbcImpl implements PostDao {
             statement.close();
             ConnectionManager.disconnect();
         } catch (Exception e) {
-            System.out.println("Cant connect to database... ");
+            logger.severe("Error method listAllPosts " + e.getMessage() + "\n");
             e.printStackTrace();
         }
 
@@ -58,8 +62,9 @@ public class PostDaoJdbcImpl implements PostDao {
             query.close();
             resultSet.close();
             ConnectionManager.disconnect();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            logger.severe("Error method selectPostByMemberId " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
         return membersPosts;
     }
@@ -100,8 +105,9 @@ public class PostDaoJdbcImpl implements PostDao {
             }
             insert.close();
             ConnectionManager.disconnect();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            logger.severe("Error method insertPost " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
         return post;
     }
@@ -112,8 +118,19 @@ public class PostDaoJdbcImpl implements PostDao {
     }
 
     @Override
-    public boolean deletePost(Post post) throws SQLException {
-        return false;
+    public boolean deletePost(int postId) throws SQLException {
+        String sqlDelete = "delete from Posts where postId=?";
+        int totalLinesModified = 0;
+        try  {
+            connection = ConnectionManager.connect();
+            PreparedStatement query = connection.prepareStatement(sqlDelete);
+            query.setInt(1, postId);
+            totalLinesModified = query.executeUpdate();
+        } catch (SQLException ex) {
+            logger.severe("Error method deletePost " + ex.getMessage() + "\n");
+           ex.printStackTrace();
+        }
+        return totalLinesModified > 0;
     }
 
     private Post postBuilder(ResultSet rs) throws SQLException {
@@ -135,6 +152,7 @@ public class PostDaoJdbcImpl implements PostDao {
         try {
             memberPost = memberDao.selectMemberById(memberId);
         } catch (SQLException e) {
+            logger.severe("Error method getMemberPost " + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return memberPost;

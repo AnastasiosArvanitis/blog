@@ -20,7 +20,7 @@ public interface PostDao {
 
     boolean updatePost(Post post) throws SQLException;
 
-    boolean deletePost(Post post) throws SQLException;
+    boolean deletePost(int postId) throws SQLException;
 
 
 }
